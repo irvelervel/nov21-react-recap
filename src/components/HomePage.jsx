@@ -1,9 +1,19 @@
-import { Container, Row, Col, ListGroup, Spinner, Toast } from 'react-bootstrap'
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Spinner,
+  Toast,
+  InputGroup,
+  FormControl,
+} from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const HomePage = () => {
+const HomePage = ({ filter }) => {
   const [data, setData] = useState([])
+  //   const [filter, setFilter] = useState('') // this is for local filtering
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
 
@@ -43,15 +53,46 @@ const HomePage = () => {
         <Row>
           <Col>
             <h2>AGENDA APPLICATION</h2>
+            {/* <InputGroup className='mb-3'>  // this is for local filtering
+              <FormControl
+                placeholder='Filter appointments here!'
+                aria-label='Filter'
+                aria-describedby='Filter'
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              />
+            </InputGroup> */}
             {isLoading && <Spinner variant='warning' animation='border' />}
             <ListGroup>
-              {data.map((appointment) => (
-                <Link key={appointment._id} to={'/details/' + appointment._id}>
-                  <ListGroup.Item>
-                    {appointment.name} - {appointment.description}
-                  </ListGroup.Item>
-                </Link>
-              ))}
+              {data
+                // SUPER COMPRESSED VERSION // this is for local filtering
+                // .filter(
+                //   ({ name, description }) =>
+                //     name.toLowerCase().includes(filter.toLowerCase()) ||
+                //     description.toLowerCase().includes(filter.toLowerCase())
+                // )
+                // A LITTLE MORE STEP-TO-STEP VERSION // this is for local filtering
+                .filter((appointment) => {
+                  let isFilterInAppointment =
+                    appointment.name
+                      .toLowerCase()
+                      .includes(filter.toLowerCase()) ||
+                    appointment.description
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                  // isFilterInAppointment is going to be true or false
+                  return isFilterInAppointment
+                })
+                .map((appointment) => (
+                  <Link
+                    key={appointment._id}
+                    to={'/details/' + appointment._id}
+                  >
+                    <ListGroup.Item>
+                      {appointment.name} - {appointment.description}
+                    </ListGroup.Item>
+                  </Link>
+                ))}
             </ListGroup>
           </Col>
         </Row>

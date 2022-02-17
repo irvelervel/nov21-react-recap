@@ -5,21 +5,22 @@ import HomePage from './components/HomePage'
 import MyNavbar from './components/MyNavbar'
 import Footer from './components/Footer'
 import Profile from './components/Profile'
+import AppointmentDetail from './components/AppointmentDetail'
+import { useState } from 'react'
 
 // we're going to create something similar to what you created in M3
 // an agenda application, with details, routes, hooks,etc.
 
 function App() {
+  const [filter, setFilter] = useState('')
+
   return (
     <BrowserRouter>
-      <MyNavbar />
+      <MyNavbar filter={filter} setFilter={setFilter} />
       <Routes>
-        <Route path='/' element={<HomePage />} />
+        <Route path='/' element={<HomePage filter={filter} />} />
         <Route path='/profile' element={<Profile />} />
-        <Route
-          path='/details/:appointmentId'
-          element={<div>APPOINTMENTS DETAILS</div>}
-        />
+        <Route path='/details/:appointmentId' element={<AppointmentDetail />} />
       </Routes>
       <Footer />
     </BrowserRouter>
